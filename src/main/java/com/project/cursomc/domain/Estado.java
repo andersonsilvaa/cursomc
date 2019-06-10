@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name="ESTADO")
 public class Estado implements Serializable {
@@ -28,6 +30,7 @@ public class Estado implements Serializable {
 	private String descricao;
 	
 	@OneToMany(mappedBy="estado")
+	@JsonBackReference
 	private List<Cidade> cidades;
 	
 	/*****************************************************

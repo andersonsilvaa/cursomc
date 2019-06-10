@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -39,9 +40,11 @@ public class Cliente implements Serializable {
 	@Column(name="TIPO")
 	private Integer tipo;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="cliente")
 	private List<Endereco> enderecos;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="cliente", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REMOVE }, orphanRemoval = true)
 	private List<Telefone> telefones;
