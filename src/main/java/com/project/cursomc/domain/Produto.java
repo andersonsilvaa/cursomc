@@ -84,10 +84,14 @@ public class Produto implements Serializable {
 	}
 	
 	public List<Categoria> getCategorias() {
+		if(this.categorias==null){
+			this.categorias = new ArrayList<Categoria>();
+		}
 		return Collections.unmodifiableList(categorias);
 	}
 	
 	public void setCategorias(List<Categoria> categorias) {
+		
 		this.categorias = categorias;
 	}
 	

@@ -1,21 +1,19 @@
 package com.project.cursomc.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ESTADO")
-public class Estado implements Serializable {
+@Table(name="TELEFONE")
+public class Telefone implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -24,22 +22,24 @@ public class Estado implements Serializable {
 	@Column(name="ID")
 	private Long id;
 	
-	@Column(name="DESCRICAO")
-	private String descricao;
+	@Column(name="NUMERO")
+	private String numero;
 	
-	@OneToMany(mappedBy="estado")
-	private List<Cidade> cidades;
+	@ManyToOne
+	@JoinColumn(name="CLIENTEID")
+	private Cliente cliente;
 	
 	/*****************************************************
 	 *	CONSTRUTORES
 	 ****************************************************/
 	
-	public Estado() {
+	public Telefone() {
 	}
 	
-	public Estado(Long id, String descricao) {
+	public Telefone(Long id, String numero, Cliente cliente) {
 		this.id = id;
-		this.descricao = descricao;
+		this.numero = numero;
+		this.cliente = cliente;
 	}
 	
 	/*****************************************************
@@ -49,44 +49,31 @@ public class Estado implements Serializable {
 	public Long getId() {
 		return id;
 	}
-
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	
+	public Cliente getCliente() {
+		return cliente;
 	}
 	
-	public List<Cidade> getCidades() {
-		if(this.cidades==null) {
-			this.cidades = new ArrayList<Cidade>();
-		}
-		return Collections.unmodifiableList(cidades);
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	
-	public void setCidades(List<Cidade> cidades) {
-		this.cidades = cidades;
+	public String getNumero() {
+		return numero;
 	}
 	
-	public void addCidade(Cidade cidade) {
-		if(this.cidades==null) {
-			this.cidades = new ArrayList<Cidade>();
-		}
-		if(cidade!=null) {
-			cidade.setEstado(this);
-			this.cidades.add(cidade);
-		}
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 	
 	/*****************************************************
 	 *	MÉTODO HASCODE E EQUALS
 	 ****************************************************/
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -94,7 +81,7 @@ public class Estado implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -103,7 +90,7 @@ public class Estado implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Estado other = (Estado) obj;
+		Telefone other = (Telefone) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -118,7 +105,7 @@ public class Estado implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Estado [id=" + id + ", descricao=" + descricao + ", cidades=" + cidades + "]";
+		return "Telefone [cliente=" + cliente + ", numero=" + numero + "]";
 	}
-	
+
 }

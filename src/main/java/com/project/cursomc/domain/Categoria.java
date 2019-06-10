@@ -66,6 +66,9 @@ public class Categoria implements Serializable {
 	}
 	
 	public List<Produto> getProdutos() {
+		if(this.produtos==null) {
+			this.produtos = new ArrayList<Produto>();
+		}
 		return Collections.unmodifiableList(this.produtos);
 	}
 	
