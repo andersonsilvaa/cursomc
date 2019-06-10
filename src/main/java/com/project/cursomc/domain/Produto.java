@@ -10,12 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="CATEGORIA")
-public class Categoria implements Serializable {
+@Table(name="PRODUTO")
+public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -24,22 +26,30 @@ public class Categoria implements Serializable {
 	@Column(name="ID")
 	private Long id;
 	
-	@Column(name="DESCRICAO")
-	private String descricao;
+	@Column(name="NOME")
+	private String nome;
 	
-	@ManyToMany(mappedBy="categorias")
-	private List<Produto> produtos;
+	@Column(name="PRECO")
+	private Double preco;
+	
+	@ManyToMany
+	@JoinTable(name = "PRODUTO_CATEGORIA",
+		joinColumns = @JoinColumn(name="produto_id"),
+		inverseJoinColumns = @JoinColumn(name="categoria_id")
+	)
+	private List<Categoria> categorias;
 	
 	/*****************************************************
 	 *	CONSTRUTORES
 	 ****************************************************/
 	
-	public Categoria() {
+	public Produto() {
 	}
 	
-	public Categoria(Long id, String descricao) {
+	public Produto(Long id, String nome, Double preco) {
 		this.id = id;
-		this.descricao = descricao;
+		this.nome = nome;
+		this.preco = preco;
 	}
 	
 	/*****************************************************
@@ -54,32 +64,39 @@ public class Categoria implements Serializable {
 		this.id = id;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
 	}
 	
-	public List<Produto> getProdutos() {
-		return Collections.unmodifiableList(this.produtos);
+	public List<Categoria> getCategorias() {
+		return Collections.unmodifiableList(categorias);
 	}
 	
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 	
-	public void addProduto(Produto produto) {
-		if(this.produtos==null) {
-			this.produtos = new ArrayList<Produto>();
+	public void addCategoria(Categoria categoria) {
+		if(this.categorias==null){
+			this.categorias = new ArrayList<Categoria>();
 		}
-		if(produto!=null) {
-			produto.addCategoria(this);
-			this.produtos.add(produto);
+		if(categoria!=null) {
+			this.categorias.add(categoria);
 		}
 	}
-	
+
 	/*****************************************************
 	 *	MÉTODO HASCODE E EQUALS
 	 ****************************************************/
@@ -91,7 +108,7 @@ public class Categoria implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -100,7 +117,7 @@ public class Categoria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -113,9 +130,6 @@ public class Categoria implements Serializable {
 	 *	SOBRESCRITA NO MÉTODO toString
 	 ****************************************************/
 	
-	@Override
-	public String toString() {
-		return "Categoria [id=" + id + ", descricao=" + descricao + "]";
-	}
+	
 	
 }
