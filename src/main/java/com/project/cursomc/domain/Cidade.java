@@ -1,9 +1,6 @@
 package com.project.cursomc.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,15 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
-@Table(name="PRODUTO")
-public class Produto implements Serializable {
+@Table(name="CIDADE")
+public class Cidade implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -28,31 +22,23 @@ public class Produto implements Serializable {
 	@Column(name="ID")
 	private Long id;
 	
-	@Column(name="NOME")
-	private String nome;
+	@Column(name="DESCRICAO")
+	private String descricao;
 	
-	@Column(name="PRECO")
-	private Double preco;
-	
-	@JsonBackReference
-	@ManyToMany
-	@JoinTable(name = "PRODUTO_CATEGORIA",
-		joinColumns = @JoinColumn(name="produto_id"),
-		inverseJoinColumns = @JoinColumn(name="categoria_id")
-	)
-	private List<Categoria> categorias;
+	@ManyToOne
+	@JoinColumn(name="ESTADOID")
+	private Estado estado;
 	
 	/*****************************************************
 	 *	CONSTRUTORES
 	 ****************************************************/
 	
-	public Produto() {
+	public Cidade() {
 	}
 	
-	public Produto(Long id, String nome, Double preco) {
+	public Cidade(Long id, String descricao) {
 		this.id = id;
-		this.nome = nome;
-		this.preco = preco;
+		this.descricao = descricao;
 	}
 	
 	/*****************************************************
@@ -67,43 +53,26 @@ public class Produto implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Double getPreco() {
-		return preco;
-	}
-
-	public void setPreco(Double preco) {
-		this.preco = preco;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 	
-	public List<Categoria> getCategorias() {
-		return Collections.unmodifiableList(categorias);
+	public Estado getEstado() {
+		return estado;
 	}
 	
-	public void setCategorias(List<Categoria> categorias) {
-		this.categorias = categorias;
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	
-	public void addCategoria(Categoria categoria) {
-		if(this.categorias==null){
-			this.categorias = new ArrayList<Categoria>();
-		}
-		if(categoria!=null) {
-			this.categorias.add(categoria);
-		}
-	}
-
 	/*****************************************************
 	 *	MÉTODO HASCODE E EQUALS
 	 ****************************************************/
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -120,7 +89,7 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		Cidade other = (Cidade) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -129,14 +98,13 @@ public class Produto implements Serializable {
 		return true;
 	}
 
-
 	/*****************************************************
 	 *	SOBRESCRITA NO MÉTODO toString
 	 ****************************************************/
 	
 	@Override
 	public String toString() {
-		return "Produto [id=" + id + ", nome=" + nome + ", preco=" + preco + ", categorias=" + categorias + "]";
+		return "Cidade [id=" + id + ", descricao=" + descricao + ", estado=" + estado + "]";
 	}
 	
 }
