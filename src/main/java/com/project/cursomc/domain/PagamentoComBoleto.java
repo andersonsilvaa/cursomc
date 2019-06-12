@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
@@ -15,9 +16,11 @@ public class PagamentoComBoleto extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name="DATA_VENCIMENTO")
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataVencimento;
 	
 	@Column(name="DATA_PAGAMENTO")
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataPagamento;
 	
 	/*****************************************************

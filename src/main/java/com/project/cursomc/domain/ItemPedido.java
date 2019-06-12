@@ -7,6 +7,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="ITEMPEDIDO")
 public class ItemPedido implements Serializable {
@@ -14,6 +16,7 @@ public class ItemPedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
+	@JsonIgnore
 	private ItemPedidoPK id;
 	
 	@Column(name="desconto")
@@ -51,6 +54,7 @@ public class ItemPedido implements Serializable {
 		this.id.setPedido(pedido);
 	}
 	
+	@JsonIgnore
 	public Pedido getPedido() {
 		return this.id.getPedido();
 	}

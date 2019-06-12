@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.cursomc.domain.enums.TipoCliente;
 
@@ -48,6 +49,7 @@ public class Cliente implements Serializable {
 	@OneToMany(mappedBy="cliente", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<Telefone> telefones;
 	
+	@JsonBackReference
 	@OneToMany(mappedBy="cliente", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<Pedido> pedidos;
 	
