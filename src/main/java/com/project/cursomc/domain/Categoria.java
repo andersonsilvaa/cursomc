@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name="CATEGORIA")
 public class Categoria implements Serializable {
@@ -30,7 +28,6 @@ public class Categoria implements Serializable {
 	@Column(name="DESCRICAO")
 	private String descricao;
 	
-	@JsonManagedReference
 	@ManyToMany(mappedBy="categorias", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	private List<Produto> produtos;
 	

@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="TELEFONE")
@@ -28,7 +28,7 @@ public class Telefone implements Serializable {
 	private String numero;
 	
 	@ManyToOne
-	@JsonBackReference
+	@JsonIgnore
 	@JoinColumn(name="CLIENTE_ID")
 	private Cliente cliente;
 	
