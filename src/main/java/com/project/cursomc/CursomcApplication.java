@@ -14,6 +14,7 @@ import com.project.cursomc.domain.Cidade;
 import com.project.cursomc.domain.Cliente;
 import com.project.cursomc.domain.Endereco;
 import com.project.cursomc.domain.Estado;
+import com.project.cursomc.domain.ItemPedido;
 import com.project.cursomc.domain.Pagamento;
 import com.project.cursomc.domain.PagamentoComBoleto;
 import com.project.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.project.cursomc.domain.enums.TipoCliente;
 import com.project.cursomc.repositories.CategoriaRepository;
 import com.project.cursomc.repositories.ClienteRepository;
 import com.project.cursomc.repositories.EstadoRepository;
+import com.project.cursomc.repositories.ItemPedidoRepository;
 import com.project.cursomc.repositories.PedidoRepository;
 
 @SpringBootApplication
@@ -41,6 +43,9 @@ public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -109,6 +114,22 @@ public class CursomcApplication implements CommandLineRunner {
 		pedidos.forEach(pedido->cliente.addPedido(pedido));
 		
 		this.pedidoRepository.saveAll(pedidos);
+		
+		/***************************************************************************************************/
+		
+		ItemPedido primeiroItemPedido = new ItemPedido(primeiroPedido, produtoComputador, 0.00, 1, 2000.00);
+		ItemPedido segundoItemPedido = new ItemPedido(primeiroPedido, produtoMouse, 0.00, 2, 80.00);
+		ItemPedido terceiroItemPedido = new ItemPedido(segundoPedido, produtoImpressora, 100.00, 1, 800.00);
+		
+		List<ItemPedido> itens = Arrays.asList(primeiroItemPedido, segundoItemPedido);
+		itens.forEach(item->primeiroPedido.addItem(item));
+		segundoPedido.addItem(terceiroItemPedido);
+		
+		produtoComputador.addItem(primeiroItemPedido);
+		produtoImpressora.addItem(terceiroItemPedido);
+		produtoMouse.addItem(segundoItemPedido);
+		
+		this.itemPedidoRepository.saveAll(Arrays.asList(primeiroItemPedido, segundoItemPedido, terceiroItemPedido));
 	}
 	
 }

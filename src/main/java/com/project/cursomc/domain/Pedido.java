@@ -2,6 +2,8 @@ package com.project.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -38,6 +41,9 @@ public class Pedido implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ENDERECO_DE_ENTREGA_ID")
 	private Endereco enderecoDeEntrega;
+	
+	@OneToMany(mappedBy="id.pedido", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
+	private Set<ItemPedido> itens;
 	
 	/*****************************************************
 	 *	CONSTRUTORES
@@ -98,14 +104,61 @@ public class Pedido implements Serializable {
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+	
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
+	
+	public void addItem(ItemPedido item) {
+		if(this.itens==null){
+			this.itens = new HashSet<ItemPedido>();
+		}
+		if(item!=null) {
+			item.setPedido(this);
+			this.itens.add(item);
+		}
+	}
+	
 	/*****************************************************
 	 *	MÉTODO HASCODE E EQUALS
 	 ****************************************************/
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pedido other = (Pedido) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
 	/*****************************************************
 	 *	SOBRESCRITA NO MÉTODO toString
 	 ****************************************************/
 	
+	@Override
+	public String toString() {
+		return "Pedido [id=" + id + ", instante=" + instante + ", pagamento=" + pagamento + ", cliente=" + cliente
+				+ ", enderecoDeEntrega=" + enderecoDeEntrega + ", itens=" + itens + "]";
+	}
 
 }

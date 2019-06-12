@@ -3,7 +3,9 @@ package com.project.cursomc.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -42,6 +45,9 @@ public class Produto implements Serializable {
 		inverseJoinColumns = @JoinColumn(name="CATEGORIA_ID")
 	)
 	private List<Categoria> categorias;
+	
+	@OneToMany(mappedBy="id.produto", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
+	private Set<ItemPedido> itens;
 	
 	/*****************************************************
 	 *	CONSTRUTORES
@@ -104,6 +110,30 @@ public class Produto implements Serializable {
 			this.categorias.add(categoria);
 		}
 	}
+	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+	
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
+	
+	public void addItem(ItemPedido item) {
+		if(this.itens==null){
+			this.itens = new HashSet<ItemPedido>();
+		}
+		if(item!=null) {
+			item.setProduto(this);
+			this.itens.add(item);
+		}
+	}
+	
+	public List<Pedido> getPedidos(){
+		List<Pedido> lst = new ArrayList<Pedido>();
+		this.itens.forEach(item->lst.add(item.getPedido()));
+		return lst;
+	}
 
 	/*****************************************************
 	 *	MÉTODO HASCODE E EQUALS
@@ -134,14 +164,14 @@ public class Produto implements Serializable {
 		return true;
 	}
 
-
 	/*****************************************************
 	 *	SOBRESCRITA NO MÉTODO toString
 	 ****************************************************/
 	
 	@Override
 	public String toString() {
-		return "Produto [id=" + id + ", nome=" + nome + ", preco=" + preco + ", categorias=" + categorias + "]";
+		return "Produto [id=" + id + ", nome=" + nome + ", preco=" + preco + ", categorias=" + categorias + ", itens="
+				+ itens + "]";
 	}
 	
 }
