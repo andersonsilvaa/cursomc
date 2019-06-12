@@ -41,13 +41,15 @@ public class Cliente implements Serializable {
 	private Integer tipo;
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy="cliente")
+	@OneToMany(mappedBy="cliente", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<Endereco> enderecos;
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy="cliente", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REMOVE }, orphanRemoval = true)
+	@OneToMany(mappedBy="cliente", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<Telefone> telefones;
+	
+	@OneToMany(mappedBy="cliente", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
+	private List<Pedido> pedidos;
 	
 	/*****************************************************
 	 *	CONSTRUTORES
@@ -147,6 +149,27 @@ public class Cliente implements Serializable {
 		if(telefone!=null) {
 			telefone.setCliente(this);
 			this.telefones.add(telefone);
+		}
+	}
+	
+	public List<Pedido> getPedidos() {
+		if(this.pedidos==null) {
+			this.pedidos = new ArrayList<Pedido>();
+		}
+		return Collections.unmodifiableList(pedidos);
+	}
+	
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
+	
+	public void addPedido(Pedido pedido) {
+		if(this.pedidos==null) {
+			this.pedidos = new ArrayList<Pedido>();
+		}
+		if(pedido!=null) {
+			pedido.setCliente(this);
+			this.pedidos.add(pedido);
 		}
 	}
 	

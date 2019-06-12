@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,10 +36,10 @@ public class Produto implements Serializable {
 	private Double preco;
 	
 	@JsonBackReference
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@JoinTable(name = "PRODUTO_CATEGORIA",
-		joinColumns = @JoinColumn(name="produto_id"),
-		inverseJoinColumns = @JoinColumn(name="categoria_id")
+		joinColumns = @JoinColumn(name="PRODUTO_ID"),
+		inverseJoinColumns = @JoinColumn(name="CATEGORIA_ID")
 	)
 	private List<Categoria> categorias;
 	

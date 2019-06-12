@@ -4,50 +4,52 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.project.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
-@Table(name="CIDADE")
-public class Cidade implements Serializable {
+@Table(name="PAGAMENTO")
+@Inheritance(strategy=InheritanceType.JOINED)
+public abstract class Pagamento implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID")
 	private Long id;
 	
-	@Column(name="DESCRICAO")
-	private String descricao;
+	@Column(name="ESTADO")
+	private Integer estadoPagamento;
 	
-	@ManyToOne
-	@JsonManagedReference
-	@JoinColumn(name="ESTADO_ID")
-	private Estado estado;
+	@OneToOne
+	@JoinColumn(name="PEDIDO_ID")
+	@MapsId
+	private Pedido pedido;
 	
 	/*****************************************************
 	 *	CONSTRUTORES
 	 ****************************************************/
 	
-	public Cidade() {
+	public Pagamento() {
 	}
-	
-	public Cidade(Long id, String descricao) {
+
+	public Pagamento(Long id, EstadoPagamento estadoPagamento, Pedido pedido) {
 		this.id = id;
-		this.descricao = descricao;
+		this.estadoPagamento = estadoPagamento.getCodigo();
+		this.pedido = pedido;
 	}
-	
+
 	/*****************************************************
 	 *	METODOS ACESSORES
 	 ****************************************************/
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -56,26 +58,26 @@ public class Cidade implements Serializable {
 		this.id = id;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public EstadoPagamento getEstadoPagamento() {
+		return EstadoPagamento.toEnum(estadoPagamento);
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setEstadoPagamento(EstadoPagamento estadoPagamento) {
+		this.estadoPagamento = estadoPagamento.getCodigo();
 	}
-	
-	public Estado getEstado() {
-		return estado;
+
+	public Pedido getPedido() {
+		return pedido;
 	}
-	
-	public void setEstado(Estado estado) {
-		this.estado = estado;
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 	
 	/*****************************************************
 	 *	MÉTODO HASCODE E EQUALS
 	 ****************************************************/
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -83,7 +85,7 @@ public class Cidade implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -92,7 +94,7 @@ public class Cidade implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cidade other = (Cidade) obj;
+		Pagamento other = (Pagamento) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -107,7 +109,7 @@ public class Cidade implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Cidade [id=" + id + ", descricao=" + descricao + ", estado=" + estado + "]";
+		return "Pagamento [id=" + id + ", estadoPagamento=" + estadoPagamento + ", pedido=" + pedido + "]";
 	}
 	
 }
